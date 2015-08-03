@@ -1,9 +1,5 @@
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class BinaryHeapTest {
     private final int ARRAY_SIZE_DIAPASON = 1000;
@@ -13,7 +9,7 @@ public class BinaryHeapTest {
     @Test
     public void simpleOrderTest() {
         Integer[] randomIntegers = getRandomIntegerArray();
-        BinaryHeap heap = new BinaryHeap<Integer, Integer>();
+        BinaryHeap<Integer, Integer> heap = new BinaryHeap<>();
         for (Integer randomInteger : randomIntegers) {
             heap.insert(randomInteger, randomInteger);
         }
