@@ -1,15 +1,15 @@
 
 public class HeapElement<K extends Comparable<K>, T> {
-    private K indexPart;
+    private K comparablePart;
     private T mainPart;
 
-    public HeapElement(K indexPart, T mainPart) {
-        this.indexPart = indexPart;
+    public HeapElement(K comparablePart, T mainPart) {
+        this.comparablePart = comparablePart;
         this.mainPart = mainPart;
     }
 
-    public K getIndexPart() {
-        return indexPart;
+    public K getComparablePart() {
+        return comparablePart;
     }
 
     public T getMainPart() {
