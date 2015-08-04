@@ -13,6 +13,7 @@ public class BinaryHeapTest {
         for (Integer randomInteger : randomIntegers) {
             heap.insert(randomInteger, randomInteger);
         }
+        Assert.assertEquals(heap.size(), randomIntegers.length);
         Integer currentPeak = MAX_ELEMENT_SIZE + 1;
         while (!heap.isEmpty()) {
             Integer lastPeak = currentPeak;
