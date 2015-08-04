@@ -22,8 +22,8 @@ public class BinaryHeap<K extends Comparable<K>, T> implements PriorityQueue<K, 
         body[size] = new HeapElement<>(index, element);
         setElementUp(size);
         ++size;
-        if (size == body.length) {
-            changeBodySize(height + 1);
+        if (size == body.length - 1) {
+            changeBodySize(++height);
         }
     }
 
@@ -38,7 +38,7 @@ public class BinaryHeap<K extends Comparable<K>, T> implements PriorityQueue<K, 
     private void setElementDown(int indexOfElementToFall) {
         int currentIndex = indexOfElementToFall;
         int maxChildIndex = getBiggestChildIndex(indexOfElementToFall);
-        while (maxChildIndex >= 0 && body[currentIndex].getIndexPart().compareTo(body[maxChildIndex]) <= 0) {
+        while (maxChildIndex >= 0 && body[currentIndex].getIndexPart().compareTo(body[maxChildIndex].getIndexPart()) <= 0) {
             moveElement(currentIndex, maxChildIndex);
             currentIndex = maxChildIndex;
             maxChildIndex = getBiggestChildIndex(maxChildIndex);
@@ -48,9 +48,15 @@ public class BinaryHeap<K extends Comparable<K>, T> implements PriorityQueue<K, 
     private void setElementUp(int indexOfCurrentPlace) {
         int currentIndex = indexOfCurrentPlace;
         int indexOfCurrentParent = getParentIndex(indexOfCurrentPlace);
-        while (currentIndex > 0 && body[currentIndex].getIndexPart().compareTo(body[indexOfCurrentParent]) >= 0) {
+        while (currentIndex > 0 && body[currentIndex].getIndexPart().compareTo(body[indexOfCurrentParent].getIndexPart()) >= 0) {
             moveElement(currentIndex, indexOfCurrentParent);
+            currentIndex = indexOfCurrentParent;
+            indexOfCurrentParent = getParentIndex(indexOfCurrentParent);
         }
+    }
+
+    private int getParentIndex(int elementIndex) {
+        return (elementIndex - 1) / 2;
     }
 
     private void moveElement(int statrIndex, int fifnshIndex) {
@@ -83,7 +89,10 @@ public class BinaryHeap<K extends Comparable<K>, T> implements PriorityQueue<K, 
     }
 
     private void changeBodySize(int neededHeight) {
-
+        int newBodySize = getBodySize(neededHeight);
+        HeapElement[] bufferedBody = new HeapElement[newBodySize];
+        System.arraycopy(body, 0, bufferedBody, 0, body.length);
+        body = bufferedBody;
     }
 
     private int getBodySize(int neededHeight) {
