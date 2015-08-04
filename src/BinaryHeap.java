@@ -2,13 +2,14 @@
 public class BinaryHeap<K extends Comparable<K>, T> implements PriorityQueue<K, T> {
     private int size = 0;
     private int height = 3;
-    private HeapElement[] body = new HeapElement[getBodySize(height)];
+    @SuppressWarnings("unchecked")
+    private HeapElement<K, T>[] body = new HeapElement[getBodySize(height)];
 
     @Override
     public T getMax() {
         if (isEmpty()) return null;
         @SuppressWarnings("unchecked")
-        T result = (T) body[0].getMainPart();
+        T result = body[0].getMainPart();
         body[0] = body[size - 1];
         --size;
         if (size > 1) {
@@ -38,7 +39,8 @@ public class BinaryHeap<K extends Comparable<K>, T> implements PriorityQueue<K, 
     private void setElementDown(int indexOfElementToFall) {
         int currentIndex = indexOfElementToFall;
         int maxChildIndex = getBiggestChildIndex(indexOfElementToFall);
-        while (maxChildIndex >= 0 && body[currentIndex].getIndexPart().compareTo(body[maxChildIndex].getIndexPart()) <= 0) {
+        while (maxChildIndex >= 0 &&
+                body[currentIndex].getComparablePart().compareTo(body[maxChildIndex].getComparablePart()) <= 0) {
             moveElement(currentIndex, maxChildIndex);
             currentIndex = maxChildIndex;
             maxChildIndex = getBiggestChildIndex(maxChildIndex);
@@ -48,7 +50,7 @@ public class BinaryHeap<K extends Comparable<K>, T> implements PriorityQueue<K, 
     private void setElementUp(int indexOfCurrentPlace) {
         int currentIndex = indexOfCurrentPlace;
         int indexOfCurrentParent = getParentIndex(indexOfCurrentPlace);
-        while (currentIndex > 0 && body[currentIndex].getIndexPart().compareTo(body[indexOfCurrentParent].getIndexPart()) >= 0) {
+        while (currentIndex > 0 && body[currentIndex].getComparablePart().compareTo(body[indexOfCurrentParent].getComparablePart()) >= 0) {
             moveElement(currentIndex, indexOfCurrentParent);
             currentIndex = indexOfCurrentParent;
             indexOfCurrentParent = getParentIndex(indexOfCurrentParent);
@@ -59,10 +61,10 @@ public class BinaryHeap<K extends Comparable<K>, T> implements PriorityQueue<K, 
         return (elementIndex - 1) / 2;
     }
 
-    private void moveElement(int statrIndex, int fifnshIndex) {
-        HeapElement tempElement = body[statrIndex];
-        body[statrIndex] = body[fifnshIndex];
-        body[fifnshIndex] = tempElement;
+    private void moveElement(int startIndex, int finishIndex) {
+        HeapElement<K, T> tempElement = body[startIndex];
+        body[startIndex] = body[finishIndex];
+        body[finishIndex] = tempElement;
     }
 
     private int getBiggestChildIndex(int parentIndex) {
@@ -75,8 +77,8 @@ public class BinaryHeap<K extends Comparable<K>, T> implements PriorityQueue<K, 
         if (leftChild == null & rightChild != null) return rightChildIndex;
         if (rightChild == null & leftChild != null) return leftChildIndex;
         if (leftChild == null & rightChild == null) return -1;
-        K leftIndex = leftChild.getIndexPart();
-        K rightIndex = rightChild.getIndexPart();
+        K leftIndex = leftChild.getComparablePart();
+        K rightIndex = rightChild.getComparablePart();
         return (leftIndex.compareTo(rightIndex) >= 0) ? (leftChildIndex) : (rightChildIndex);
     }
 
@@ -90,7 +92,8 @@ public class BinaryHeap<K extends Comparable<K>, T> implements PriorityQueue<K, 
 
     private void changeBodySize(int neededHeight) {
         int newBodySize = getBodySize(neededHeight);
-        HeapElement[] bufferedBody = new HeapElement[newBodySize];
+        @SuppressWarnings("unchecked")
+        HeapElement<K, T>[] bufferedBody = new HeapElement[newBodySize];
         System.arraycopy(body, 0, bufferedBody, 0, body.length);
         body = bufferedBody;
     }
